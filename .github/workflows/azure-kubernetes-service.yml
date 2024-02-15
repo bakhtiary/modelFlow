@@ -50,15 +50,11 @@ jobs:
     steps:
       # Checks out the repository this file is in
       - uses: actions/checkout@v3
-      - name: Build and push image to ACR
-        run: |
-          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.CONTAINER_NAME }}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
-
       # Logs in with your Azure credentials
       - name: Azure login
         uses: azure/login@v1.6.1
         with: # Set Azure credentials secret as an input
-          credentials: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
         run: |
