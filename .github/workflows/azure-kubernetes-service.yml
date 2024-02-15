@@ -54,7 +54,7 @@ jobs:
       - name: Azure login
         uses: azure/login@v1.6.1
         with: # Set Azure credentials secret as an input
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          client-id: hassan
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           clientSecret: ${{ secrets.AZURE_SECRET_ID }}
