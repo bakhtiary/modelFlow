@@ -56,9 +56,9 @@ jobs:
 
       # Logs in with your Azure credentials
       - name: Azure login
-        uses: azure/login@v1.4.6
+        uses: azure/login@V1.6.1
         with: # Set Azure credentials secret as an input
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          credentials: ${{ secrets.AZURE_CREDENTIALS }}
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
         run: |
