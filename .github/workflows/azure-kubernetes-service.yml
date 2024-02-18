@@ -36,7 +36,7 @@ on:
 
 env:
   AZURE_CONTAINER_REGISTRY: "modelFlow"
-  CONTAINER_NAME: "mainApp"
+  CONTAINER_NAME: "main-app"
   RESOURCE_GROUP: "modelFlow"
   CLUSTER_NAME: "modelFlow"
   DEPLOYMENT_MANIFEST_PATH: "simplePod.yaml"
@@ -62,7 +62,7 @@ jobs:
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
         run: |
-          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/main-app:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
+          az acr build --image ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{env.CONTAINER_NAME}}:${{ github.sha }} --registry ${{ env.AZURE_CONTAINER_REGISTRY }} -g ${{ env.RESOURCE_GROUP }} .
 
   deploy:
     permissions:
