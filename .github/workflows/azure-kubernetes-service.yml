@@ -41,6 +41,17 @@ env:
   CLUSTER_NAME: "modelFlow"
   DEPLOYMENT_MANIFEST_PATH: "simplePod.yaml"
 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in with Azure
+        uses: azure/login@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+
+
 jobs:
   buildImage:
     permissions:
@@ -50,14 +61,18 @@ jobs:
     steps:
       # Checks out the repository this file is in
       - uses: actions/checkout@v3
-
-      # Logs in with your Azure credentials
-      - name: Azure login
-        uses: azure/login@v1.6.1
+      - name: Log in with Azure
+        uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+
+      # # Logs in with your Azure credentials
+      # - name: Azure login
+      #   uses: azure/login@v1.6.1
+      #   with:
+      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
+      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       # Builds and pushes an image up to your Azure Container Registry
       - name: Build and push image to ACR
