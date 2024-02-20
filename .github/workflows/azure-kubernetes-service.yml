@@ -52,7 +52,6 @@ jobs:
           creds: '${{ secrets.AZURE_CREDENTIALS }}'
 
 
-jobs:
   buildImage:
     permissions:
       contents: read
