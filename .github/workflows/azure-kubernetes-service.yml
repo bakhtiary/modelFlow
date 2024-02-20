@@ -41,17 +41,7 @@ env:
   CLUSTER_NAME: "modelFlow"
   DEPLOYMENT_MANIFEST_PATH: "simplePod.yaml"
 
-
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Log in with Azure
-        uses: azure/login@v1
-        with:
-          creds: '${{ secrets.AZURE_CREDENTIALS }}'
-
-
   buildImage:
     permissions:
       contents: read
