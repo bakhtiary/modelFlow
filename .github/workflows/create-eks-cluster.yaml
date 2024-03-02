@@ -41,7 +41,7 @@ jobs:
             eksctl create cluster -f ${{ github.workspace }}/eksctl-setup/cluster.yaml
           
           fi
-          aws eks update-kubeconfig --profile github-actions-aws --region eu-west-1 --name modelFlow
+          aws eks update-kubeconfig --name modelFlow
       - name: build Docker
         id: build-docker
         run: |
