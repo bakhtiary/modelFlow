@@ -41,4 +41,4 @@ jobs:
           
           sudo mv /tmp/eksctl /usr/local/bin
           
-          eksctl create cluster  --profile github-actions-aws -f ${{ github.workspace }}/eksctl-setup/cluster.yaml
+          eksctl create cluster -f ${{ github.workspace }}/eksctl-setup/cluster.yaml
