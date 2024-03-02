@@ -27,9 +27,10 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-
-      - name: eksctl
-        container:
-          image: 'Dockerfile'
-        args:
-          - ${{ inputs.who-to-greet }}
+      - name: build
+        id: build-image
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          eksctl get clusters
