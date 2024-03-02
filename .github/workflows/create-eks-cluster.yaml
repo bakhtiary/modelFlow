@@ -2,7 +2,8 @@
 name: create eksctl
 
 on:
-  workflow_dispatch
+  push:
+    branches: [ "main" ]
 
 env:
   AWS_REGION: "eu-west-1"
@@ -26,8 +27,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-      - name: build
-        id: build-image
+      - name: install eksctl and create cluster
+        id: create-cluster
         run: |
           ARCH=amd64
           PLATFORM=$(uname -s)_$ARCH
@@ -42,3 +43,12 @@ jobs:
           sudo mv /tmp/eksctl /usr/local/bin
           
           eksctl create cluster -f ${{ github.workspace }}/eksctl-setup/cluster.yaml
+      - name: build Docker
+        id: build-docker
+        run: |
+          cd .. && docker build . -t some-random-tag
+
+      - name: deploy
+        id: deploy
+        run: |
+          kubectl apply -f deployment.yaml
