@@ -31,7 +31,7 @@ jobs:
         id: create-cluster
         run: |
           if [[ $(aws eks list-clusters --profile github-actions-aws --region eu-west-1 | grep modelFlow) ]]; then
-          
+            aws ecr create-repository --repository-name modelflow --region eu-west-1
             ARCH=amd64
             PLATFORM=$(uname -s)_$ARCH            
             curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
@@ -45,8 +45,10 @@ jobs:
       - name: build Docker
         id: build-docker
         run: |
-          docker build . -t some-random-tag
-
+          aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 003014710138.dkr.ecr.eu-west-1.amazonaws.com
+          docker build . -t modelflow
+          docker tag modelflow:latest 003014710138.dkr.ecr.eu-west-1.amazonaws.com/modelflow:latest
+          docker push 003014710138.dkr.ecr.eu-west-1.amazonaws.com/modelflow:latest
       - name: deploy
         id: deploy
         run: |
