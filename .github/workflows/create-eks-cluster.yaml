@@ -30,19 +30,18 @@ jobs:
       - name: install eksctl and create cluster
         id: create-cluster
         run: |
-          ARCH=amd64
-          PLATFORM=$(uname -s)_$ARCH
+          if [[ $(aws eks list-clusters --profile github-actions-aws --region eu-west-1 | grep modelFlow) ]]; then
           
-          curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+            ARCH=amd64
+            PLATFORM=$(uname -s)_$ARCH            
+            curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+            curl -sL "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_checksums.txt" | grep $PLATFORM | sha256sum --check
+            tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
+            sudo mv /tmp/eksctl /usr/local/bin
+            eksctl create cluster -f ${{ github.workspace }}/eksctl-setup/cluster.yaml
           
-          # (Optional) Verify checksum
-          curl -sL "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_checksums.txt" | grep $PLATFORM | sha256sum --check
-          
-          tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
-          
-          sudo mv /tmp/eksctl /usr/local/bin
-          
-          eksctl create cluster -f ${{ github.workspace }}/eksctl-setup/cluster.yaml
+          fi
+
       - name: build Docker
         id: build-docker
         run: |
