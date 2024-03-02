@@ -1,5 +1,5 @@
 
-name: delete eksctl
+name: create eksctl
 
 on:
   workflow_dispatch
@@ -41,4 +41,4 @@ jobs:
           
           sudo mv /tmp/eksctl /usr/local/bin
           
-          eksctl delete cluster  --profile github-actions-aws -f ${{ github.workspace }}/eksctl-setup/cluster.yaml
+          eksctl create cluster  --profile github-actions-aws -f ${{ github.workspace }}/eksctl-setup/cluster.yaml
