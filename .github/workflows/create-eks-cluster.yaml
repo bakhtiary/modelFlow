@@ -45,7 +45,7 @@ jobs:
       - name: build Docker
         id: build-docker
         run: |
-          cd .. && docker build . -t some-random-tag
+          docker build . -t some-random-tag
 
       - name: deploy
         id: deploy
