@@ -41,4 +41,6 @@ jobs:
           
           sudo mv /tmp/eksctl /usr/local/bin
           
+          aws eks update-kubeconfig --name modelFlow
+          kubectl delete --all deployments --all-namespaces
           eksctl delete cluster -f ${{ github.workspace }}/eksctl-setup/cluster.yaml
