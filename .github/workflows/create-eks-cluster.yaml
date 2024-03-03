@@ -31,7 +31,9 @@ jobs:
         id: create-cluster
         run: |
           if [[ ! $(aws eks list-clusters --region eu-west-1 | grep modelFlow) ]]; then
-            aws ecr create-repository --repository-name modelflow --region eu-west-1
+            if [[ ! $(aws ecr describe-repositories --region eu-west-1 | grep modelflow) ]]
+              aws ecr create-repository --repository-name modelflow --region eu-west-1
+            fi
             ARCH=amd64
             PLATFORM=$(uname -s)_$ARCH            
             curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
