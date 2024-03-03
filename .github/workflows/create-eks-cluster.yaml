@@ -31,7 +31,7 @@ jobs:
         id: create-cluster
         run: |
           if [[ ! $(aws eks list-clusters --region eu-west-1 | grep modelFlow) ]]; then
-            if [[ ! $(aws ecr describe-repositories --region eu-west-1 | grep modelflow) ]]
+            if [[ ! $(aws ecr describe-repositories --region eu-west-1 | grep modelflow) ]]; then
               aws ecr create-repository --repository-name modelflow --region eu-west-1
             fi
             ARCH=amd64
