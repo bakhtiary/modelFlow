@@ -30,7 +30,7 @@ jobs:
       - name: install eksctl and create cluster
         id: create-cluster
         run: |
-          if [[ $(aws eks list-clusters --profile github-actions-aws --region eu-west-1 | grep modelFlow) ]]; then
+          if [[ $(aws eks list-clusters --region eu-west-1 | grep modelFlow) ]]; then
             aws ecr create-repository --repository-name modelflow --region eu-west-1
             ARCH=amd64
             PLATFORM=$(uname -s)_$ARCH            
