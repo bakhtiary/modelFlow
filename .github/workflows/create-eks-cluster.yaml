@@ -40,8 +40,7 @@ jobs:
             curl -sL "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_checksums.txt" | grep $PLATFORM | sha256sum --check
             tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
             sudo mv /tmp/eksctl /usr/local/bin
-            eksctl create cluster -f ${{ github.workspace }}/eksctl-setup/cluster.yaml
-          
+            eksctl create cluster -f ${{ github.workspace }}/eksctl-setup/cluster.yaml          
           fi
           aws eks update-kubeconfig --name modelFlow
       - name: build Docker
@@ -55,3 +54,4 @@ jobs:
         id: deploy
         run: |
           kubectl apply -f deployment.yaml
+          kubectl apply -f loadbalancer.yaml
