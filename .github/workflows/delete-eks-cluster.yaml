@@ -1,5 +1,5 @@
 
-name: delete eksctl
+name: delete all infra
 
 on:
   workflow_dispatch
@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy
+    name: Undeploy
     runs-on: ubuntu-latest
     environment: production
 
@@ -43,4 +43,5 @@ jobs:
           
           aws eks update-kubeconfig --name modelFlow
           kubectl delete --all deployments --all-namespaces
+          kubectl delete --all Service --all-namespaces
           eksctl delete cluster -f ${{ github.workspace }}/eksctl-setup/cluster.yaml

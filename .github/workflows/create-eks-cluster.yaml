@@ -50,8 +50,8 @@ jobs:
           docker build . -t modelflow
           docker tag modelflow:latest 003014710138.dkr.ecr.eu-west-1.amazonaws.com/modelflow:latest
           docker push 003014710138.dkr.ecr.eu-west-1.amazonaws.com/modelflow:latest
-      - name: deploy
-        id: deploy
+      - name: deploy k8s
+        id: deploy-k8s
         run: |
           kubectl apply -f deployment.yaml
           kubectl apply -f loadbalancer.yaml
