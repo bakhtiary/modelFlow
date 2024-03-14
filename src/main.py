@@ -1,7 +1,8 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File
 from fastapi import APIRouter, Depends
 from fastapi import Security, HTTPException, status
 from fastapi.security import APIKeyHeader
+from typing import Annotated
 
 app = FastAPI()
 public_router = APIRouter()
@@ -37,8 +38,8 @@ async def root():
     return {"message": "Hello World"}
 
 
-@secure_router.get("/classifyImage")
-async def classifyImage():
+@secure_router.post("/classifyImage")
+async def classifyImage(file: Annotated[bytes, File()]):
 
     return {"cat"}
 

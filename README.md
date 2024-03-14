@@ -14,5 +14,6 @@ docker build . -t tmp && docker run -it -p8000:8000 tmp
 
 ## to lock requirments
 pip install -r requirements.txt
-pip freeze >> requirements.locked.txt
+
+pip freeze > requirements.locked.txt
 
