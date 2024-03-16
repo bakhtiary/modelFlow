@@ -1,5 +1,5 @@
 
-name: create eksctl
+name: kubectl get services
 
 on:
   push:
