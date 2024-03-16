@@ -2,8 +2,7 @@
 name: kubectl get services
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch
 
 env:
   AWS_REGION: "eu-west-1"
