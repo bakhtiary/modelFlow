@@ -52,4 +52,4 @@ jobs:
           docker tag modelflow:latest 003014710138.dkr.ecr.eu-west-1.amazonaws.com/modelflow:latest
           docker push 003014710138.dkr.ecr.eu-west-1.amazonaws.com/modelflow:latest
           DOCKER_HASH=$(docker images --no-trunc --quiet containers.mpi-internal.com/adv_jvm21_ubuntu)
-          kubectl kustomize ./k8s-setup | sed s;modelflow:modelflow-newtag-this-will-get-replaced;modelflow@$TMP; | kubectl apply -f -
+          kubectl kustomize ./k8s-setup | sed s;modelflow:modelflow-newtag-this-will-get-replaced;modelflow@$DOCKER_HASH; | kubectl apply -f -
