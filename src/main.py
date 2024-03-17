@@ -3,6 +3,10 @@ from fastapi import APIRouter, Depends
 from fastapi import Security, HTTPException, status
 from fastapi.security import APIKeyHeader
 from typing import Annotated
+from PIL import Image
+import torch
+from transformers import AutoImageProcessor, AutoModelForImageClassification
+import io
 
 app = FastAPI()
 public_router = APIRouter()
@@ -39,9 +43,18 @@ async def root():
 
 
 @secure_router.post("/classifyImage")
-async def classifyImage(file: Annotated[bytes, File()]):
+async def classifyImage(file_contents: Annotated[bytes, File()]):
+    image = Image.open(io.BytesIO(file_contents))
 
-    return {"cat"}
+    processor = AutoImageProcessor.from_pretrained("google/efficientnet-b7")
+    model = AutoModelForImageClassification.from_pretrained("google/efficientnet-b7")
+    inputs = processor(image, return_tensors="pt")
+
+    with torch.no_grad():
+        logits = model(**inputs).logits
+    # model predicts one of the 1000 ImageNet classes
+    predicted_label = logits.argmax(-1).item()
+    return model.config.id2label[predicted_label]
 
 
 app.include_router(
