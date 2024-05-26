@@ -2,8 +2,9 @@
 name: create eksctl
 
 on:
-  push:
-    branches: [ "main" ]
+#  push:
+#    branches: [ "main" ]
+  workflow_dispatch
 
 env:
   AWS_REGION: "eu-west-1"

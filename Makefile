@@ -7,3 +7,10 @@ run-server-venv:
 
 portforward:
 	kubectl proxy
+
+start-kind-cluster:
+	rm ~/.kube/config
+	kind create cluster --config cluster-setup/kind.yaml
+
+delete-kind-cluster:
+	kind delete clusters model-flow
