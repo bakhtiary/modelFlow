@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: modelflow
-          image: modelflow-newtag-this-will-get-replaced
+          image: modelflow
           ports:
             - containerPort: 8000
