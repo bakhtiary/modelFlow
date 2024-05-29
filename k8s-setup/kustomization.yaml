@@ -5,10 +5,7 @@ resources:
 - deployment.yaml
 - service.yaml
 - postgres-configmap.yaml
-- ps-deployment.yaml
-- ps-service.yaml
-- psql-claim.yaml
-- psql-pv.yaml
+
 images:
 - name: modelflow
   newName: modelflow
