@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: modelflow
   labels:
-    app: nginx
+    app: modelflow
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: nginx
+      app: modelflow
   template:
     metadata:
       labels:
-        app: nginx
+        app: modelflow
     spec:
       containers:
         - name: modelflow
