@@ -17,3 +17,11 @@ def test_calling_a_none_existing_model():
     assert response.json() == {"detail": "model not found"}
 
 
+def test_creating_a_model():
+    response = client.put("/models/dummy_model_a")
+    assert response.status_code == 200
+    assert response.json() == {"detail": "model added"}
+
+
+
+

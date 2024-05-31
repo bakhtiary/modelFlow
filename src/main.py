@@ -47,6 +47,11 @@ async def get_model(model_id: str):
     raise HTTPException(status_code=404, detail="model not found")
 
 
+@app.put("/models/{model_id}")
+async def put_model(model_id: str):
+    return {"detail": "model added"}
+
+
 @secure_router.post("/classifyImage")
 async def classifyImage(file_contents: Annotated[bytes, File()]):
     return "I don't want to classify"
