@@ -23,6 +23,7 @@ def get_user(api_key_header: str = Security(api_key_header)):
 @public_router.get("/")
 async def get_testroute():
     return "OK"
+
 app.include_router(
     public_router,
     prefix="/api/v1/public"
