@@ -29,6 +29,8 @@ app.include_router(
     prefix="/api/v1/public"
 )
 
+
+
 secure_router = APIRouter()
 
 @secure_router.get("/")
@@ -38,6 +40,11 @@ async def get_testroute(user: dict = Depends(get_user)):
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.get("/models/{model_id}")
+async def get_model(model_id: str):
+    raise HTTPException(status_code=404, detail="model not found")
 
 
 @secure_router.post("/classifyImage")
