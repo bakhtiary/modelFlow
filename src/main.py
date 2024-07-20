@@ -1,4 +1,6 @@
-from fastapi import FastAPI, File
+from dataclasses import dataclass
+
+from fastapi import FastAPI, File, Request
 from fastapi import APIRouter, Depends
 from fastapi import Security, HTTPException, status
 from fastapi.security import APIKeyHeader
@@ -29,8 +31,6 @@ app.include_router(
     prefix="/api/v1/public"
 )
 
-
-
 secure_router = APIRouter()
 
 @secure_router.get("/")
@@ -41,6 +41,39 @@ async def get_testroute(user: dict = Depends(get_user)):
 async def root():
     return {"message": "Hello World"}
 
+
+class ModelTemplateRepository:
+    def __init__(self):
+        self.next_id = 0
+        self.model_templates = {}
+    def add_model(self, param):
+        self.next_id += 1
+        self.model_templates[self.next_id] = param
+        return self.next_id
+
+    def get_by_id(self, template_id):
+        return self.model_templates[template_id]
+        pass
+
+
+model_template_repository = ModelTemplateRepository()
+
+@dataclass
+class ModelTemplate:
+    name: str
+    location: str
+    docker_image: str
+
+@app.put("/model_template")
+async def put_model_template(request: Request):
+    model_template = ModelTemplate(**await request.json())
+    model_id = model_template_repository.add_model(model_template)
+    return {"id": model_id}
+
+
+@app.get("/model_template/{template_id}")
+async def get_model_template(template_id: int):
+    return model_template_repository.get_by_id(template_id)
 
 @app.get("/models/{model_id}")
 async def get_model(model_id: str):
