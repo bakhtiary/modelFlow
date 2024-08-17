@@ -8,6 +8,7 @@ on:
 
 env:
   AWS_REGION: "eu-west-1"
+  PROJECT_NAME: "modelApi"
 
 permissions:
   contents: read
@@ -31,9 +32,9 @@ jobs:
       - name: install eksctl and create cluster
         id: create-cluster
         run: |
-          if [[ ! $(aws eks list-clusters --region eu-west-1 | grep modelFlow) ]]; then
-            if [[ ! $(aws ecr describe-repositories --region eu-west-1 | grep modelflow) ]]; then
-              aws ecr create-repository --repository-name modelflow --region eu-west-1
+          if [[ ! $(aws eks list-clusters --region eu-west-1 | grep $PROJECT_NAME) ]]; then
+            if [[ ! $(aws ecr describe-repositories --region eu-west-1 | grep $PROJECT_NAME) ]]; then
+              aws ecr create-repository --repository-name $PROJECT_NAME --region eu-west-1
             fi
             ARCH=amd64
             PLATFORM=$(uname -s)_$ARCH            
@@ -43,14 +44,14 @@ jobs:
             sudo mv /tmp/eksctl /usr/local/bin
             eksctl create cluster -f ${{ github.workspace }}/cluster-setup/eks.yaml          
           fi
-          aws eks update-kubeconfig --name modelFlow
+          aws eks update-kubeconfig --name $PROJECT_NAME
       - name: build Docker
         id: build-docker
         run: |
           aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 003014710138.dkr.ecr.eu-west-1.amazonaws.com
-          docker build . -t modelflow
+          docker build . -t $PROJECT_NAME
           docker images --no-trunc --quiet containers.mpi-internal.com/adv_jvm21_ubuntu
-          docker tag modelflow:latest 003014710138.dkr.ecr.eu-west-1.amazonaws.com/modelflow:latest
-          docker push 003014710138.dkr.ecr.eu-west-1.amazonaws.com/modelflow:latest
-          REPO_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' 003014710138.dkr.ecr.eu-west-1.amazonaws.com/modelflow:latest)
-          kubectl kustomize ./k8s-setup | sed "s;modelflow-newtag-this-will-get-replaced;$REPO_DIGEST;" | kubectl apply -f -
+          docker tag $PROJECT_NAME:latest 003014710138.dkr.ecr.eu-west-1.amazonaws.com/$PROJECT_NAME:latest
+          docker push 003014710138.dkr.ecr.eu-west-1.amazonaws.com/$PROJECT_NAME:latest
+          REPO_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' 003014710138.dkr.ecr.eu-west-1.amazonaws.com/$PROJECT_NAME:latest)
+          kubectl kustomize ./k8s-setup | sed "s;newtag-this-will-get-replaced;$REPO_DIGEST;" | kubectl apply -f -
