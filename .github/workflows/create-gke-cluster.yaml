@@ -59,5 +59,6 @@ jobs:
     # Deploy the Docker image to the GKE cluster
     - name: Deploy
       run: |-
-        kubectl apply -f deploy.yml
+        REPO_DIGEST=$(docker inspect --format='{{index .RepoDigests 0}}' "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG")
+        kubectl kustomize ./k8s-setup | sed "s;modelflow-newtag-this-will-get-replaced;$REPO_DIGEST;" | kubectl apply -f -
         kubectl get pods
