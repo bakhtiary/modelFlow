@@ -1,38 +1,30 @@
+import unittest
+from unittest.mock import Mock, MagicMock
 
-from main import app
+import pytest
+
+from wiring import Wiring
+from VertexEmbeddingAdapter import VertexEmbeddingAdapter
 from fastapi.testclient import TestClient
 
-client = TestClient(app)
+
+class TestMain(unittest.TestCase):
 
 
-def test_main():
-    response = client.get("/")
-    assert response.status_code == 200
-    assert response.json() == {"message": "Hello World"}
+    def setUp(self):
+        self.vertex_embedding_adapter = Mock(VertexEmbeddingAdapter)
+        wiring = Wiring(mocks={VertexEmbeddingAdapter:self.vertex_embedding_adapter})
+        self.client = TestClient(wiring.up())
 
-def test_creating_a_model_provides_an_id_this_id_can_be_used_to_get_model_details():
+    def test_main(self):
+        response = self.client.get("/")
+        assert response.status_code == 200
+        assert response.json() == {"message": "Hello World"}
 
-    response = client.put("model_template", json={"name": "some_name", "location": "some_location", "docker_image": "the_image"})
-    model_id = response.json()["id"]
-
-    get_response = client.get(f"model_template/{model_id}")
-
-    assert get_response.json()["name"] == "some_name"
-    assert get_response.json()["location"] == "some_location"
-    assert get_response.json()["docker_image"] == "the_image"
-
-
-def test_calling_a_none_existing_model():
-    response = client.get("/models/none_existing_model")
-    assert response.status_code == 404
-    assert response.json() == {"detail": "model not found"}
-
-
-def test_creating_a_model():
-    response = client.put("/models/dummy_model_a")
-    assert response.status_code == 200
-    assert response.json() == {"detail": "model added"}
-
+    def test_vertex_text_embedding(self):
+        self.vertex_embedding_adapter.invoke = MagicMock(return_value=[1,2,3,4])
+        response = self.client.post("/models/text-embedding-004/invoke")
+        assert "2,3,4" in response.text
 
 
 
